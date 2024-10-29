@@ -81,8 +81,8 @@ All code has been written in R. The Tidyverse framework was utilised to  read, m
 ## Folder Structure
 ```
 ├── data/                          # Contains word lists and other data files
-	├── valid-wordle-words.txt     # Text file of valid answers
-	├── past_wordle_answers.txt    # Text file of previous answers (incomplete)
+    ├── valid-wordle-words.txt     # Text file of valid answers
+    ├── past_wordle_answers.txt    # Text file of previous answers (incomplete)
 ├── scripts/                       # Core game and solver scripts
 │   ├── main.R                     # Primary script for running the game
 │   ├── utils.R                    # Helper functions (probability calculations, feedback)
