@@ -1,6 +1,6 @@
 # Wordle Solver
 This repository will store all code for a solver of the popular game Wordle. 
-Wordle is a popular online puzzle currently owned and run by the New York Times in which a user attempts to guess a 5 letter word. With a total of 6 guesses available. Guesses where a user gets correct letters in the correct tile show as green, correct letters in the wrong tile shows as yellow, and letters not in the answer show as grey. 
+Wordle is a popular online puzzle currently owned and run by the New York Times in which a user attempts to guess a 5 letter word with a total of 6 guesses available. Guesses where a user gets correct letters in the correct tile show as green, correct letters in the wrong tile shows as yellow, and letters not in the answer show as grey. 
 
 This attempt at a Wordle solver uses logic from conditional probability to systematically eliminate unviable words as guesses are made, narrowing down a list of approximately 15000 words to make it's pick. It begins it's pick by initialising an `alphabet_matrix` of size 26x5 based on the relative frequency of how often each letter of the alphabet occurs in any given tile. This gives us 5 probability mass functions over the alphabet for each tile.  As guesses are made, feedback is given and the resulting information of green, grey, and yellow tiles are used to update the `alphabet_matrix` and the valid word list. 
 
@@ -25,6 +25,28 @@ The function takes the answer to the wordle round as it's argument.
 
 ```
 game_results <- game("pious")
+```
+
+Will return the following:
+
+```
+$guesses
+[1] "sores" "aloos" "chons" "quoys" "pious" ""     
+
+$guesses_feedback
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    1    0    0    2
+[2,]    0    0    2    1    2
+[3,]    0    0    2    0    2
+[4,]    0    1    2    0    2
+[5,]    2    2    2    2    2
+[6,]    0    0    0    0    0
+
+$i
+[1] 5
+
+$found
+[1] TRUE
 ```
 
 `game` Returns a list with a vector of guesses, a matrix of the feedback for each guess (0: grey, 1: yellow, 2: green), the number of guesses taken, and a boolean of whether the word was found.
