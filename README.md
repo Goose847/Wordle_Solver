@@ -91,4 +91,4 @@ All code has been written in R. The Tidyverse framework was utilised to  read, m
 ## Contributing
 Please feel free to fork the project and improve on it as you see fit. I'd appreciate feedback, advice, or any other comments. 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENCE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](Wordle_solver/LICENCE) file for details.
