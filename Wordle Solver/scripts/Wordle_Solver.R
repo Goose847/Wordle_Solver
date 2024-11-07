@@ -99,3 +99,4 @@ ggplot(win_results, aes(i)) +
   labs(x = "Number of Guesses", y = "frequency") +
   theme_minimal()
 
+
