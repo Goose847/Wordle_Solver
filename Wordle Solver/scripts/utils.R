@@ -57,6 +57,7 @@ bayesian_update <- function(guess, feedback, alphabet_matrix, word_probabilities
   # We can boost letters that are yellow in available tiles (not this one)
   # Takes in the guess, feedback, alphabet_matrix, word_probabilities, valid_words, and valid_words_matrix.
   # Returns a list containing updated alphabet_matrix, word_probabilities, valid_words, and valid_words_matrix.
+  alphabet_matrix_new = alphabet_matrix
   
   guess = unlist(str_split(guess, ""))
   yellows = guess[which(feedback == 1)]
@@ -64,18 +65,18 @@ bayesian_update <- function(guess, feedback, alphabet_matrix, word_probabilities
   for (i in 1:5) {
     # update greens
     if (feedback[i] == 2) {
-      alphabet_matrix[match(guess[i], alphabet), i] <- 1
-      alphabet_matrix[-match(guess[i], alphabet), i] <- 0
+      alphabet_matrix_new[match(guess[i], alphabet), i] <- 1
+      alphabet_matrix_new[-match(guess[i], alphabet), i] <- 0
     }
     
     # update greys
     if (feedback[i] == 0) {
-      alphabet_matrix[match(guess[i], alphabet),] <- 0
+      alphabet_matrix_new[match(guess[i], alphabet),] <- 0
     }
     
     # Stop yellows from reappearing in the same tile
     if (feedback[i] == 1) {
-      alphabet_matrix[match(guess[i], alphabet), i] <- 0
+      alphabet_matrix_new[match(guess[i], alphabet), i] <- 0
     }
   }
   
@@ -86,14 +87,17 @@ bayesian_update <- function(guess, feedback, alphabet_matrix, word_probabilities
   })
   
   # reevaluate relative frequencies based on valid words and yellow tile in word
-  word_probabilities <- apply(valid_words_matrix, MARGIN = 1, word_prob, alphabet_matrix = alphabet_matrix)
+  word_probabilities <- apply(valid_words_matrix, MARGIN = 1, word_prob, alphabet_matrix = alphabet_matrix_new)
   subset_condition <- word_probabilities > 0 & yellow_indices
   
   valid_words <- valid_words[subset_condition, 1]
   valid_words_matrix <- valid_words_matrix[subset_condition,]
   #update the relative frequency for new valid words
-  alphabet_matrix <- relative_frequency(alphabet_matrix, valid_words_matrix)
-  word_probabilities <- apply(valid_words_matrix, MARGIN = 1, word_prob, alphabet_matrix = alphabet_matrix)
+  alphabet_matrix_new <- relative_frequency(alphabet_matrix_new, valid_words_matrix)
+  
+  # multiply by the new and old alphabet_matrix and scale
+  alphabet_matrix_new = apply(alphabet_matrix_new * alphabet_matrix, 2, function(x) x/sum(x)) 
+  word_probabilities <- apply(valid_words_matrix, MARGIN = 1, word_prob, alphabet_matrix = alphabet_matrix_new)
   
   return(
     list(
