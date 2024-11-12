@@ -43,7 +43,16 @@ game <- function(answer) {
   found <-  FALSE
   
   while (i <= 6 & found != TRUE) {
-    guess <- valid_words[which.max(word_probabilities), 1]
+    # randomly select one of the top 10 initial guesses
+    if (i == 1){
+      sorted_indices <- order(word_probabilities, decreasing = TRUE)
+      top_words <- valid_words[sorted_indices[1:10], 1]
+      guess = sample(top_words, 1, TRUE)
+    }
+    else{
+      guess <- valid_words[which.max(word_probabilities), 1]
+    }
+    
     guesses[i] <- guess[[1, 1]]
     
     guess_feedback = feedback(guess, answer)
@@ -99,4 +108,6 @@ ggplot(win_results, aes(i)) +
   labs(x = "Number of Guesses", y = "frequency") +
   theme_minimal()
 
+
+game("event")
 
